@@ -1,2 +1,4 @@
-usuario1|$2b$12$eImiTXuWVxfM37uY4JANjPeq6D1ho6zR4i3HquCrXy1K4lM/9Ukcm
 admin|$2b$12$wsGtaD3sEW4euZ3sbmcKv.9RHczPy1dCHTFFaJVG7WfrA57j8XOO2
+Alex|$2b$12$oofxPV34F7wrnufwF6wXdOSHviil56w60xGLq8XfYt0eYyIPBJY7y
+Prueba|$2b$12$FUmjr1aHVra1oMIYdj3WJex/MOMqM0LTLaVSfT7FplTF1snF2vgbC
+Dehua|$2b$12$WoBrQYC2w7gQ04.Sp.Hlq.LNBqcmEUEr6phKu.8Ze67bLhweETdOq

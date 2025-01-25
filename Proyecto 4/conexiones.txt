@@ -1,0 +1,10 @@
+# Nodos
+Dehua
+admin
+Alex
+
+# Aristas
+Dehua -> admin
+Alex -> Dehua
+Dehua -> Alex
+Alex -> admin
