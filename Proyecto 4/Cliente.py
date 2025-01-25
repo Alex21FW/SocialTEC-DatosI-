@@ -20,7 +20,7 @@ try:
             print(mensaje)
 
             # Condición para cerrar conexión si el mensaje contiene ciertas frases
-            if mensaje in ["FIN", "Contraseña incorrecta. Acceso denegado.", "Usuario registrado con éxito. Por favor, inicie sesión nuevamente."]:
+            if mensaje in ["FIN", "Contraseña incorrecta. Acceso denegado.", "Registro exitoso. Por favor, inicie sesión en el modo 1.", "Credenciales incorrectas."]:
                 break
 
             entrada = input()

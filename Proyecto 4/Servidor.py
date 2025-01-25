@@ -1,34 +1,7 @@
 # Hacer pip install passlib y bcrypt
 import socket
 from passlib.hash import bcrypt
-
-# Archivo donde se almacenan los usuarios y contraseñas encriptadas
-USUARIOS_FILE = "usuarios.txt"
-
-# Función para cargar usuarios desde el archivo
-def cargar_usuarios():
-    usuarios = {}
-    try:
-        with open(USUARIOS_FILE, "r") as file:
-            for linea in file:
-                usuario, password_hash = linea.strip().split("|")
-                usuarios[usuario] = password_hash
-    except FileNotFoundError:
-        print("Archivo de usuarios no encontrado, se creará uno nuevo.")
-    return usuarios
-
-# Función para guardar un nuevo usuario en el archivo
-def guardar_usuario(usuario, contraseña):
-    usuarios = cargar_usuarios()
-
-    if usuario in usuarios:
-        print(f"El usuario {usuario} ya esta registrado")
-        return
-    
-    with open(USUARIOS_FILE, "a") as file:
-        password_hash = bcrypt.hash(contraseña)
-        file.write(f"\n{usuario}|{password_hash}")
-    print(f"Usuario {usuario} registrado con éxito.")
+from Usuarios import cargar_usuarios, guardar_usuario  # Importar funciones del archivo usuarios.py
 
 # Crear el socket del servidor
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -45,47 +18,50 @@ try:
         usuarios = cargar_usuarios()  # Cargar usuarios desde el archivo
 
         try:
-            # Solicitar nombre de usuario
-            conexion.send("Ingrese su nombre de usuario:".encode('utf-8'))
-            usuario = conexion.recv(1024).decode('utf-8')
+            # Solicitar modo al cliente
+            conexion.send("Seleccione un modo: 1 para inicio de sesión, 2 para registro:".encode('utf-8'))
+            modo = conexion.recv(1024).decode('utf-8').strip()
 
-            # Verificar si el usuario existe
-            if usuario not in usuarios:
-                conexion.send("Usuario no encontrado. ¿Desea registrarse? (si/no):".encode('utf-8'))
-                respuesta = conexion.recv(1024).decode('utf-8').strip().lower()
-                if respuesta == "si":
-                    conexion.send("Ingrese una nueva contraseña:".encode('utf-8'))
-                    nueva_contraseña = conexion.recv(1024).decode('utf-8')
-                    guardar_usuario(usuario, nueva_contraseña)
-                    conexion.send("Usuario registrado con éxito. Por favor, inicie sesión nuevamente.".encode('utf-8'))
+            if modo == "1":  # Modo de inicio de sesión
+                conexion.send("Ingrese su usuario:".encode('utf-8'))
+                usuario = conexion.recv(1024).decode('utf-8').strip()
+
+                conexion.send("Ingrese su contraseña:".encode('utf-8'))
+                contraseña = conexion.recv(1024).decode('utf-8').strip()
+
+                # Verificar usuario y contraseña
+                if usuario in usuarios and bcrypt.verify(contraseña, usuarios[usuario]):
+                    conexion.send("Inicio de sesión exitoso. Escribe 'salir' para desconectarte.".encode('utf-8'))
+                    print(f"Usuario {usuario} inició sesión correctamente desde {addr}.")
+
+                    while True:
+                        comando = conexion.recv(1024).decode('utf-8').strip()
+
+                        if comando.lower() == "salir":
+                            conexion.send("FIN".encode('utf-8'))
+                            print(f"Usuario {usuario} se desconectó desde {addr}.")
+                            break
+
+                        respuesta = f"Comando recibido: {comando}"
+                        conexion.send(respuesta.encode('utf-8'))
                 else:
-                    conexion.send("Desconexión por usuario no registrado.".encode('utf-8'))
-                conexion.close()  # Cerrar la conexión solo después de enviar el mensaje
-                continue  # Volver a aceptar una nueva conexión
+                    conexion.send("Credenciales incorrectas.".encode('utf-8'))
+                    print(f"Intento de inicio de sesión fallido desde {addr}.")
 
-            # Solicitar contraseña
-            conexion.send("Ingrese su contraseña:".encode('utf-8'))
-            contraseña = conexion.recv(1024).decode('utf-8')
+            elif modo == "2":  # Modo de registro
+                conexion.send("Ingrese un nuevo usuario:".encode('utf-8'))
+                nuevo_usuario = conexion.recv(1024).decode('utf-8').strip()
 
-            # Verificar la contraseña
-            if bcrypt.verify(contraseña, usuarios[usuario]):
-                conexion.send("Inicio de sesión exitoso. Escribe 'salir' para desconectarte. Bienvenido.".encode('utf-8'))
-                print(f"Usuario {usuario} inició sesión correctamente desde {addr}.")
+                conexion.send("Ingrese una nueva contraseña:".encode('utf-8'))
+                nueva_contraseña = conexion.recv(1024).decode('utf-8').strip()
 
-                while True:
-                    comando = conexion.recv(1024).decode('utf-8').strip()
-
-                    if comando.lower() == "salir":
-                        conexion.send("FIN".encode('utf-8'))
-                        print(f"Usuario {usuario} se desconectó desde {addr}")
-                        break
-
-                    respuesta = f"Comando recibido: {comando}"
-                    conexion.send(respuesta.encode('utf-8'))
+                if guardar_usuario(nuevo_usuario, nueva_contraseña):
+                    conexion.send("Registro exitoso. Por favor, inicie sesión en el modo 1.".encode('utf-8'))
+                else:
+                    conexion.send("El usuario ya existe. Por favor, elija otro nombre.".encode('utf-8'))
 
             else:
-                conexion.send("Contraseña incorrecta. Acceso denegado.".encode('utf-8'))
-                print(f"Intento fallido de inicio de sesión de {usuario} desde {addr}.")
+                conexion.send("Modo no válido. Desconectando.".encode('utf-8'))
 
         except Exception as e:
             print(f"Error manejando la conexión con {addr}: {e}")
