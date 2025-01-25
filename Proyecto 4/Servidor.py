@@ -46,7 +46,7 @@ try:
                     comando = conexion.recv(1024).decode('utf-8').strip()
 
                     if comando.lower() == "salir":
-                        conexion.send("Desconexion exitosa. Hasta luego!".encode('utf-8'))
+                        conexion.send("FIN".encode('utf-8'))
                         print(f"Usuario {usuario} se desconecto desde {addr}")
                         break
 

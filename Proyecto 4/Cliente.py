@@ -12,7 +12,7 @@ try:
         mensaje = client_socket.recv(1024).decode('utf-8')
         print (mensaje)
 
-        if "Desconectado exitosa" in mensaje or "Acceso denegado" in mensaje:
+        if mensaje == "FIN":
             break
 
         entrada = input()
