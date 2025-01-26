@@ -41,6 +41,30 @@ class GrafoAmistades:
 
         seguidores = [origen for origen, destino in self.aristas if destino == usuario]
         return seguidores
+    
+    def ruta_entre_nodos(self, origen, destino):
+        #Devuelve la ruta entre 'origen' y 'destino' si existe.
+        if origen not in self.nodos or destino not in self.nodos:
+            return None
+
+        visitados = set()
+        cola = [[origen]]   # Cola para BFS, cada elemento es una ruta completa
+
+        while cola:
+            ruta = cola.pop(0)
+            nodo_actual = ruta[-1] #Ultimo nodo de la ruta actual
+
+            if nodo_actual == destino:
+                return ruta  
+
+            if nodo_actual not in visitados:
+                visitados.add(nodo_actual)
+                for amigo in self.obtener_amistades(nodo_actual):
+                    nueva_ruta = ruta.copy()  # Crear una copia de la ruta actual
+                    nueva_ruta.append(amigo)  # Añadir el amigo a la nueva ruta
+                    cola.append(nueva_ruta)  # Añadir la nueva ruta a la cola
+
+        return None  # Si no se encuentra una ruta, devolver None
 
     def mostrar_grafo(self):
         #Imprime todos los nodos y aristas del grafo.
@@ -92,6 +116,6 @@ class GrafoAmistades:
                         self.aristas.append((origen, destino))
 
             print("Conexiones cargadas desde el archivo.")
-            
+
         except FileNotFoundError:
             print("Archivo de conexiones no encontrado. Se creará uno nuevo.")

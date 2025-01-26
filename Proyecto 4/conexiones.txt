@@ -2,9 +2,14 @@
 Dehua
 admin
 Alex
+Ricardo
+Mariano
+Coco
 
 # Aristas
 Dehua -> admin
-Alex -> Dehua
-Dehua -> Alex
-Alex -> admin
+admin -> Alex
+Alex -> Ricardo
+Ricardo -> Mariano
+Alex -> Mariano
+Coco -> Alex

@@ -2,3 +2,6 @@ admin|$2b$12$wsGtaD3sEW4euZ3sbmcKv.9RHczPy1dCHTFFaJVG7WfrA57j8XOO2
 Alex|$2b$12$oofxPV34F7wrnufwF6wXdOSHviil56w60xGLq8XfYt0eYyIPBJY7y
 Prueba|$2b$12$FUmjr1aHVra1oMIYdj3WJex/MOMqM0LTLaVSfT7FplTF1snF2vgbC
 Dehua|$2b$12$WoBrQYC2w7gQ04.Sp.Hlq.LNBqcmEUEr6phKu.8Ze67bLhweETdOq
+Ricardo|$2b$12$pCi1rA100jIsVk6.9A9ApuIlAFYhIIN8adLhs7GtH64B/4qV3UNF6
+Mariano|$2b$12$SPXys32HwzIyno78RFEXGuIQzrsWBdidTxy2Aq44MBelaD6VyfuLK
+Coco|$2b$12$Mz9bOGnHa58zDrUOFmO3neXFKxPEwX8y1Q4mxRWgwyZy8o.Wgzuh6
