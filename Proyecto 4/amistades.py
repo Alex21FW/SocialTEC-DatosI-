@@ -30,6 +30,16 @@ class GrafoAmistades:
         else:
             print(f"La amistad {origen} -> {destino} ya existe.")
 
+    def eliminar_amistad(self, origen, destino):
+        #Elimina una relacion de amistad (Elimina una arista)
+        if (origen, destino) in self.aristas:
+            self.aristas.remove((origen, destino))
+            print(f"Amisnitad eliminada: {origen} -> {destino}")
+            self.guardar_conexiones() #Actualizar el archivo
+        
+        else:
+            print(f"La amistad {origen} -> {destino} no existe.")
+
     def obtener_amistades(self, usuario):
         #Devuelve las amistades salientes (amigos a los que sigue) del usuario.
 
@@ -65,6 +75,33 @@ class GrafoAmistades:
                     cola.append(nueva_ruta)  # Añadir la nueva ruta a la cola
 
         return None  # Si no se encuentra una ruta, devolver None
+    
+    def estadisticas_amistades(self):
+        #Calcula estadisticas de los usuarios
+
+        if not self.nodos:
+            return "No hay usuarios en el sistema"
+        
+        #Crear diccionario para el conteo
+        conteo_amistades = {usuario: len(self.obtener_amistades(usuario)) for usuario in self.nodos}
+
+        max_amigos = max(conteo_amistades.values())
+        min_amigos = min(conteo_amistades.values())
+
+        usuarios_mas_amigos = [usuario for usuario, amigos in conteo_amistades.items() if amigos == max_amigos]
+        usuarios_menos_amigos = [usuario for usuario, amigos in conteo_amistades.items() if amigos == min_amigos]
+
+        total_amigos = sum(conteo_amistades.values())
+        media_amigos = total_amigos / len(self.nodos) if self.nodos else 0
+
+        resultado = (
+            f"Estadisticas \n"
+            f"Usuario con más amigos: {', '.join(usuarios_mas_amigos)} con ({max_amigos} amigos)\n"
+            f"Usuario con menos amigos: {', '.join(usuarios_menos_amigos)} con ({min_amigos} amigos)\n"
+            f"Media de amigos por usuario: {media_amigos:.2f}"
+        )
+
+        return resultado
 
     def mostrar_grafo(self):
         #Imprime todos los nodos y aristas del grafo.

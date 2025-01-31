@@ -4,7 +4,7 @@ Consideraciones importantes antes de ejecutar el programa
 2) Los usuarios y contraseñas(Encriptadas) se guardan en usuarios.txt
 3) Asegurate que no haya espacios en blanco en el txt
 4) El servidor si lo estas viendo en VSC con solo darle play se ejecuta
-5) El cliente hay que hacerle en una nueva consola un python Cliente.py
+5) El cliente hay que hacerle en una nueva consola un python Cliente.python
 6) El archivo llamado a.py sirve para codificar la contraseña de forma manual, sirve como un traductor. Este
 no esta conectado con el codigo principal, solo sirve de depuracion.
 

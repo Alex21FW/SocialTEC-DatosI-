@@ -48,7 +48,9 @@ def manejar_cliente(conexion_ssl, addr):
                     "1. Agregar amigo\n"
                     "2. Ver amigos\n"
                     "3. Ver quiénes te siguen\n"
-                    "4. Comprobar ruta entre usuarios\n".encode('utf-8')
+                    "4. Comprobar ruta entre usuarios\n"
+                    "5. Eliminar amistad\n"
+                    "6. Mostrar estadisticas\n".encode('utf-8')
                 )
                 print(f"Usuario {usuario} inició sesión correctamente desde {addr}.")
 
@@ -103,6 +105,26 @@ def manejar_cliente(conexion_ssl, addr):
                                     conexion_ssl.send(f"Ruta encontrada: {' -> '.join(ruta)}".encode('utf-8'))
                                 else:
                                     conexion_ssl.send(f"No existe una ruta entre {origen} y {destino}".encode('utf-8'))
+
+                    elif comando == "5": #Eliminar amistad
+                        conexion_ssl.send("Ingrese el usuario de origen:".encode('utf-8'))
+                        origen = conexion_ssl.recv(1024).decode('utf-8').strip()
+
+                        conexion_ssl.send("Ingrese el usuario de destino:".encode('utf-8'))
+                        destino = conexion_ssl.recv(1024).decode('utf-8').strip()
+
+                        with lock:
+                            if (origen, destino) in amistades.aristas:
+                                amistades.eliminar_amistad(origen, destino)
+                                conexion_ssl.send(f"Amistad eliminada {origen} -> {destino}".encode('utf-8'))
+                            else:
+                                conexion_ssl.send(f"La amistad {origen} -> {destino} no existe.".encode('utf-8'))
+                    
+                    elif comando == "6": #Mostar estadisticas
+                        with lock:
+                            estadisticas = amistades.estadisticas_amistades()
+                        conexion_ssl.send(estadisticas.encode('utf-8'))
+                    
                     else:
                         conexion_ssl.send("Comando no válido. Intenta de nuevo.".encode('utf-8'))
 

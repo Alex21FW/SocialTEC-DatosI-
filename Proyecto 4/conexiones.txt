@@ -9,7 +9,6 @@ Coco
 # Aristas
 Dehua -> admin
 admin -> Alex
-Alex -> Ricardo
 Ricardo -> Mariano
 Alex -> Mariano
 Coco -> Alex
